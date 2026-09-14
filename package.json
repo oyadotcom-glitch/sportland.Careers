@@ -1,0 +1,19 @@
+{
+  "name": "sportland-jobs",
+  "version": "1.0.0",
+  "description": "SPORTLAND recruitment landing page (static frontend + Node/Express backend that emails applications to the right branch).",
+  "private": true,
+  "main": "server/index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^5.2.1",
+    "multer": "^2.3.0",
+    "nodemailer": "^9.1.1"
+  }
+}

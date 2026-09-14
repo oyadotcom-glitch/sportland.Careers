@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>רוצים לעבוד איתנו? | SPORTLAND</title>
+  <meta name="description" content="הגישו מועמדות למשרות מדריכי כושר ונציגי קבלה בסניפי SPORTLAND חדרה, בית יצחק וקריית טבעון." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <main class="page">
+    <header class="header">
+      <img src="assets/logo.png" alt="SPORTLAND" class="header__logo" />
+      <h1 class="header__title">רוצים לעבוד איתנו?</h1>
+      <p class="header__subtitle">ענו על שתי שאלות קצרות ושלחו לנו קורות חיים</p>
+    </header>
+
+    <!-- שלב 1: בחירת סניף -->
+    <section class="step" id="step-branch">
+      <h2 class="step__question">מה הסניף הרלוונטי עבורך לעבודה?</h2>
+      <div class="options" id="branch-options" aria-label="בחירת סניף">
+        <!-- אפשרויות הסניפים נבנות דינמית ע"י js/app.js לפי js/config.js -->
+      </div>
+    </section>
+
+    <!-- שלב 2: בחירת משרה -->
+    <section class="step" id="step-position" hidden>
+      <button type="button" class="back-link" id="back-to-branch" aria-label="חזרה לבחירת סניף">
+        <span aria-hidden="true">→</span> חזרה
+      </button>
+      <p class="step__context">סניף נבחר: <strong id="position-step-branch-name"></strong></p>
+      <h2 class="step__question">אנא בחר את המשרה הרלוונטית עבורך</h2>
+      <div class="options" id="position-options" aria-label="בחירת משרה">
+        <!-- אפשרויות המשרות נבנות דינמית ע"י js/app.js -->
+      </div>
+    </section>
+
+    <!-- טופס הגשת מועמדות -->
+    <section class="apply" id="apply-section" hidden>
+      <div class="apply__card">
+        <button type="button" class="back-link" id="back-btn" aria-label="חזרה לבחירת משרה">
+          <span aria-hidden="true">→</span> חזרה
+        </button>
+
+        <p class="apply__lead">הגשת מועמדות ל:</p>
+        <h2 class="apply__position" id="selected-position">—</h2>
+        <p class="apply__branch" id="selected-branch">—</p>
+
+        <form id="apply-form" class="form" novalidate>
+          <input type="hidden" name="branchId" id="branchId" />
+          <input type="hidden" name="branchName" id="branchName" />
+          <input type="hidden" name="positionId" id="positionId" />
+          <input type="hidden" name="positionName" id="positionName" />
+
+          <!-- honeypot אנטי-ספאם: שדה מוסתר שבני אדם לא ימלאו -->
+          <div class="hp-field" aria-hidden="true">
+            <label for="website">אל תמלאו שדה זה</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div class="field">
+            <label for="fullName">שם מלא <span class="req">*</span></label>
+            <input type="text" id="fullName" name="fullName" required autocomplete="name" placeholder="לדוגמה: ישראל ישראלי" />
+            <span class="field__error" id="err-fullName"></span>
+          </div>
+
+          <div class="field">
+            <label for="phone">טלפון <span class="req">*</span></label>
+            <input type="tel" id="phone" name="phone" required autocomplete="tel" inputmode="tel" placeholder="050-1234567" />
+            <span class="field__error" id="err-phone"></span>
+          </div>
+
+          <div class="field">
+            <label for="email">אימייל <span class="req">*</span></label>
+            <input type="email" id="email" name="email" required autocomplete="email" placeholder="name@example.com" />
+            <span class="field__error" id="err-email"></span>
+          </div>
+
+          <div class="field">
+            <label for="resume">קובץ קורות חיים <span class="req">*</span></label>
+            <label for="resume" class="file-drop" id="file-drop">
+              <span id="file-drop-text">לחצו כדי לצרף קובץ (PDF, DOC, DOCX — עד 10MB)</span>
+            </label>
+            <input type="file" id="resume" name="resume" required accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+            <span class="field__error" id="err-resume"></span>
+          </div>
+
+          <button type="submit" class="btn btn--submit" id="submit-btn">
+            <span id="submit-btn-text">שליחת קורות חיים</span>
+          </button>
+
+          <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- הודעת הצלחה -->
+    <section class="success" id="success-section" hidden>
+      <div class="success__card">
+        <div class="success__icon" aria-hidden="true">✓</div>
+        <h2>תודה!</h2>
+        <p>קיבלנו את קורות החיים שלך וניצור קשר אם תימצא התאמה.</p>
+        <button type="button" class="btn btn--secondary" id="restart-btn">הגשת מועמדות נוספת</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>© <span id="year"></span> SPORTLAND</p>
+    </footer>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
