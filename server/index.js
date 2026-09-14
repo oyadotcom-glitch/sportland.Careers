@@ -34,26 +34,37 @@ const upload = multer({
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
 
-const RESEND_API_URL = "https://api.resend.com/emails";
+const SENDGRID_API_URL = "https://api.sendgrid.com/v3/mail/send";
+
+function parseFromHeader(value) {
+  const match = String(value).match(/^\s*(.*?)\s*<(.+)>\s*$/);
+  if (match) {
+    return { name: match[1].replace(/^"|"$/g, ""), email: match[2] };
+  }
+  return { email: value };
+}
 
 async function sendApplicationEmail({ from, to, replyTo, subject, text, html, attachment }) {
-  const response = await fetch(RESEND_API_URL, {
+  const response = await fetch(SENDGRID_API_URL, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      Authorization: `Bearer ${process.env.SENDGRID_API_KEY}`,
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      from,
-      to,
-      reply_to: replyTo,
+      personalizations: [{ to: [{ email: to }] }],
+      from: parseFromHeader(from),
+      reply_to: { email: replyTo },
       subject,
-      text,
-      html,
+      content: [
+        { type: "text/plain", value: text },
+        { type: "text/html", value: html }
+      ],
       attachments: [
         {
           filename: attachment.filename,
-          content: attachment.buffer.toString("base64")
+          content: attachment.buffer.toString("base64"),
+          disposition: "attachment"
         }
       ]
     })
@@ -63,7 +74,7 @@ async function sendApplicationEmail({ from, to, replyTo, subject, text, html, at
     const errorBody = await response.text().catch(function () {
       return "";
     });
-    throw new Error(`Resend API error (${response.status}): ${errorBody}`);
+    throw new Error(`SendGrid API error (${response.status}): ${errorBody}`);
   }
 }
 
@@ -157,7 +168,7 @@ app.post(
       `;
 
       await sendApplicationEmail({
-        from: process.env.MAIL_FROM || "SPORTLAND <onboarding@resend.dev>",
+        from: process.env.MAIL_FROM,
         to: branch.email,
         replyTo: email.trim(),
         subject: subject,

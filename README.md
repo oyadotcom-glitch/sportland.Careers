@@ -73,20 +73,21 @@ EMAIL_BEIT_YITZHAK=Ronit@csport.co.il
 EMAIL_TIVON=tamara@csport-tivon.co.il
 ```
 
-### הגדרת שליחת המיילים (Resend API)
+### הגדרת שליחת המיילים (SendGrid API)
 
-שליחת המיילים בפועל מתבצעת דרך [Resend](https://resend.com) - שירות שליחת מיילים מבוסס HTTPS (**לא** SMTP רגיל). זה שינוי מכוון: הרבה שירותי אחסון ענן (כולל Railway) חוסמים או נתקלים בבעיות timeout עם חיבורי SMTP ישירים לספקים כמו Gmail, בעוד ש-HTTPS (פורט 443) עובד תמיד.
+שליחת המיילים בפועל מתבצעת דרך [SendGrid](https://sendgrid.com) - שירות שליחת מיילים מבוסס HTTPS (**לא** SMTP רגיל). זה שינוי מכוון: הרבה שירותי אחסון ענן (כולל Railway) חוסמים או נתקלים בבעיות timeout עם חיבורי SMTP ישירים לספקים כמו Gmail, בעוד ש-HTTPS (פורט 443) עובד תמיד.
 
-1. נרשמים בחינם ל-[resend.com](https://resend.com) (עד 3,000 מיילים בחודש / 100 ביום - חינם).
-2. יוצרים API Key בלוח הבקרה של Resend (Settings > API Keys).
-3. מגדירים בקובץ `server/.env` (העתיקו מ-`server/.env.example`):
+1. נרשמים בחינם ל-[sendgrid.com](https://sendgrid.com) (עד 100 מיילים ביום - חינם, ללא הגבלת זמן).
+2. **מאמתים כתובת שולח בודדת** (ולא דומיין שלם - אין צורך בגישה ל-DNS): בלוח הבקרה, Settings > Sender Authentication > Single Sender Verification > Create New Sender. ממלאים את הפרטים עם כתובת מייל שיש לכם גישה אליה (למשל `resume.csport@gmail.com`), ואז פותחים את תיבת הדואר ולוחצים על לינק האישור שנשלח אליה.
+3. יוצרים API Key בלוח הבקרה (Settings > API Keys > Create API Key, הרשאת "Restricted Access" עם "Mail Send" בלבד מספיקה).
+4. מגדירים בקובץ `server/.env` (העתיקו מ-`server/.env.example`):
 
 ```
-RESEND_API_KEY=re_your_api_key_here
-MAIL_FROM="SPORTLAND - גיוס עובדים" <onboarding@resend.dev>
+SENDGRID_API_KEY=SG.your_api_key_here
+MAIL_FROM="SPORTLAND - גיוס עובדים" <resume.csport@gmail.com>
 ```
 
-**לגבי כתובת השולח (`MAIL_FROM`):** בלי אימות דומיין ב-Resend, חובה להשתמש בכתובת עם הדומיין `onboarding@resend.dev` (כפי שמופיע למעלה) - Resend לא יאפשר לשלוח מדומיין אחר. כדי שהמיילים ייצאו מכתובת עם הדומיין של החברה (למשל `jobs@sportland.co.il`), יש לאמת דומיין ב-Resend דרך Settings > Domains (מוסיפים כמה רשומות DNS אצל ספק הדומיין), ואז לעדכן את `MAIL_FROM` בהתאם.
+**חשוב:** כתובת ה-`MAIL_FROM` **חייבת** להיות בדיוק הכתובת שאימתתם בשלב 2 (Single Sender) - אחרת השליחה תיכשל.
 
 ## 5. איך להעלות את האתר לשרת ולקבל לינק פעיל (Railway)
 
@@ -110,10 +111,10 @@ railway init
 ```
 בוחרים "Create new project" ונותנים שם (לדוגמה `sportland-jobs`).
 
-מגדירים את משתני הסביבה (מפתח ה-Resend API - ראו סעיף 4 למעלה):
+מגדירים את משתני הסביבה (מפתח ה-SendGrid API - ראו סעיף 4 למעלה):
 
 ```bash
-railway variables --set "RESEND_API_KEY=re_your_api_key_here" --set "MAIL_FROM=SPORTLAND <onboarding@resend.dev>"
+railway variables --set "SENDGRID_API_KEY=SG.your_api_key_here" --set "MAIL_FROM=SPORTLAND <resume.csport@gmail.com>"
 ```
 
 מעלים ומריצים את השרת:
