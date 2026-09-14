@@ -30,7 +30,7 @@ npm install
 cp server/.env.example server/.env
 ```
 
-ואז לערוך את קובץ `server/.env` ולמלא את פרטי שרת המייל (SMTP) - ראו סעיף 4.
+ואז לערוך את קובץ `server/.env` ולמלא את מפתח ה-API לשליחת מיילים - ראו סעיף 4.
 
 להרצה:
 
@@ -73,20 +73,20 @@ EMAIL_BEIT_YITZHAK=Ronit@csport.co.il
 EMAIL_TIVON=tamara@csport-tivon.co.il
 ```
 
-### הגדרת שרת המייל (SMTP)
+### הגדרת שליחת המיילים (Resend API)
 
-שליחת המיילים בפועל מתבצעת דרך שרת SMTP, שאותו יש להגדיר בקובץ `server/.env` (העתיקו מ-`server/.env.example`):
+שליחת המיילים בפועל מתבצעת דרך [Resend](https://resend.com) - שירות שליחת מיילים מבוסס HTTPS (**לא** SMTP רגיל). זה שינוי מכוון: הרבה שירותי אחסון ענן (כולל Railway) חוסמים או נתקלים בבעיות timeout עם חיבורי SMTP ישירים לספקים כמו Gmail, בעוד ש-HTTPS (פורט 443) עובד תמיד.
+
+1. נרשמים בחינם ל-[resend.com](https://resend.com) (עד 3,000 מיילים בחודש / 100 ביום - חינם).
+2. יוצרים API Key בלוח הבקרה של Resend (Settings > API Keys).
+3. מגדירים בקובץ `server/.env` (העתיקו מ-`server/.env.example`):
 
 ```
-SMTP_HOST=smtp.example.com
-SMTP_PORT=587
-SMTP_SECURE=false
-SMTP_USER=your-smtp-username
-SMTP_PASS=your-smtp-password
-MAIL_FROM="SPORTLAND - גיוס עובדים" <noreply@example.com>
+RESEND_API_KEY=re_your_api_key_here
+MAIL_FROM="SPORTLAND - גיוס עובדים" <onboarding@resend.dev>
 ```
 
-אפשר להשתמש בכל ספק SMTP - לדוגמה Gmail (עם App Password), SendGrid, Mailgun, Amazon SES, או שרת ה-SMTP של ספק האחסון/הדומיין של החברה. מומלץ לפנות לספק האחסון של האתר לפרטי ה-SMTP המדויקים.
+**לגבי כתובת השולח (`MAIL_FROM`):** בלי אימות דומיין ב-Resend, חובה להשתמש בכתובת עם הדומיין `onboarding@resend.dev` (כפי שמופיע למעלה) - Resend לא יאפשר לשלוח מדומיין אחר. כדי שהמיילים ייצאו מכתובת עם הדומיין של החברה (למשל `jobs@sportland.co.il`), יש לאמת דומיין ב-Resend דרך Settings > Domains (מוסיפים כמה רשומות DNS אצל ספק הדומיין), ואז לעדכן את `MAIL_FROM` בהתאם.
 
 ## 5. איך להעלות את האתר לשרת ולקבל לינק פעיל (Railway)
 
@@ -110,10 +110,10 @@ railway init
 ```
 בוחרים "Create new project" ונותנים שם (לדוגמה `sportland-jobs`).
 
-מגדירים את משתני הסביבה (פרטי ה-SMTP האמיתיים - ראו סעיף 4 למעלה):
+מגדירים את משתני הסביבה (מפתח ה-Resend API - ראו סעיף 4 למעלה):
 
 ```bash
-railway variables --set "SMTP_HOST=smtp.example.com" --set "SMTP_PORT=587" --set "SMTP_SECURE=false" --set "SMTP_USER=your-smtp-username" --set "SMTP_PASS=your-smtp-password" --set "MAIL_FROM=SPORTLAND <noreply@example.com>"
+railway variables --set "RESEND_API_KEY=re_your_api_key_here" --set "MAIL_FROM=SPORTLAND <onboarding@resend.dev>"
 ```
 
 מעלים ומריצים את השרת:

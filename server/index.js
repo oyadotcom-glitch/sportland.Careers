@@ -2,7 +2,6 @@ const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, ".env") });
 const express = require("express");
 const multer = require("multer");
-const nodemailer = require("nodemailer");
 const rateLimit = require("./rate-limit");
 const { BRANCHES, POSITIONS } = require("./config");
 
@@ -35,15 +34,38 @@ const upload = multer({
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT) || 587,
-  secure: process.env.SMTP_SECURE === "true",
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS
+const RESEND_API_URL = "https://api.resend.com/emails";
+
+async function sendApplicationEmail({ from, to, replyTo, subject, text, html, attachment }) {
+  const response = await fetch(RESEND_API_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      from,
+      to,
+      reply_to: replyTo,
+      subject,
+      text,
+      html,
+      attachments: [
+        {
+          filename: attachment.filename,
+          content: attachment.buffer.toString("base64")
+        }
+      ]
+    })
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text().catch(function () {
+      return "";
+    });
+    throw new Error(`Resend API error (${response.status}): ${errorBody}`);
   }
-});
+}
 
 function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -134,19 +156,17 @@ app.post(
         </div>
       `;
 
-      await transporter.sendMail({
-        from: process.env.MAIL_FROM || process.env.SMTP_USER,
+      await sendApplicationEmail({
+        from: process.env.MAIL_FROM || "SPORTLAND <onboarding@resend.dev>",
         to: branch.email,
         replyTo: email.trim(),
         subject: subject,
         text: textBody,
         html: htmlBody,
-        attachments: [
-          {
-            filename: req.file.originalname,
-            content: req.file.buffer
-          }
-        ]
+        attachment: {
+          filename: req.file.originalname,
+          buffer: req.file.buffer
+        }
       });
 
       return res.json({ ok: true });
