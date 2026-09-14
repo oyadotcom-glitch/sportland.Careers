@@ -73,21 +73,21 @@ EMAIL_BEIT_YITZHAK=Ronit@csport.co.il
 EMAIL_TIVON=tamara@csport-tivon.co.il
 ```
 
-### הגדרת שליחת המיילים (SendGrid API)
+### הגדרת שליחת המיילים (Brevo API)
 
-שליחת המיילים בפועל מתבצעת דרך [SendGrid](https://sendgrid.com) - שירות שליחת מיילים מבוסס HTTPS (**לא** SMTP רגיל). זה שינוי מכוון: הרבה שירותי אחסון ענן (כולל Railway) חוסמים או נתקלים בבעיות timeout עם חיבורי SMTP ישירים לספקים כמו Gmail, בעוד ש-HTTPS (פורט 443) עובד תמיד.
+שליחת המיילים בפועל מתבצעת דרך [Brevo](https://brevo.com) - שירות שליחת מיילים מבוסס HTTPS (**לא** SMTP רגיל), חינם לצמיתות (ללא הגבלת זמן) עד 300 מיילים ביום. זה שינוי מכוון: הרבה שירותי אחסון ענן (כולל Railway) חוסמים או נתקלים בבעיות timeout עם חיבורי SMTP ישירים לספקים כמו Gmail, בעוד ש-HTTPS (פורט 443) עובד תמיד.
 
-1. נרשמים בחינם ל-[sendgrid.com](https://sendgrid.com) (עד 100 מיילים ביום - חינם, ללא הגבלת זמן).
-2. **מאמתים כתובת שולח בודדת** (ולא דומיין שלם - אין צורך בגישה ל-DNS): בלוח הבקרה, Settings > Sender Authentication > Single Sender Verification > Create New Sender. ממלאים את הפרטים עם כתובת מייל שיש לכם גישה אליה (למשל `resume.csport@gmail.com`), ואז פותחים את תיבת הדואר ולוחצים על לינק האישור שנשלח אליה.
-3. יוצרים API Key בלוח הבקרה (Settings > API Keys > Create API Key, הרשאת "Restricted Access" עם "Mail Send" בלבד מספיקה).
+1. נרשמים בחינם ל-[brevo.com](https://brevo.com).
+2. **מאמתים כתובת שולח בודדת** (ולא דומיין שלם - אין צורך בגישה ל-DNS): בלוח הבקרה, Senders, Domains & Dedicated IPs > Senders > Add a Sender. ממלאים את הפרטים עם כתובת מייל שיש לכם גישה אליה (למשל `resume.csport@gmail.com`), ואז מזינים את הקוד בן 6 הספרות שנשלח לתיבת הדואר.
+3. יוצרים API Key בלוח הבקרה (SMTP & API > API Keys > Generate a new API key).
 4. מגדירים בקובץ `server/.env` (העתיקו מ-`server/.env.example`):
 
 ```
-SENDGRID_API_KEY=SG.your_api_key_here
+BREVO_API_KEY=xkeysib-your_api_key_here
 MAIL_FROM="SPORTLAND - גיוס עובדים" <resume.csport@gmail.com>
 ```
 
-**חשוב:** כתובת ה-`MAIL_FROM` **חייבת** להיות בדיוק הכתובת שאימתתם בשלב 2 (Single Sender) - אחרת השליחה תיכשל.
+**חשוב:** כתובת ה-`MAIL_FROM` **חייבת** להיות בדיוק הכתובת שאימתתם בשלב 2 (Sender) - אחרת השליחה תיכשל.
 
 ## 5. איך להעלות את האתר לשרת ולקבל לינק פעיל (Railway)
 
@@ -111,10 +111,10 @@ railway init
 ```
 בוחרים "Create new project" ונותנים שם (לדוגמה `sportland-jobs`).
 
-מגדירים את משתני הסביבה (מפתח ה-SendGrid API - ראו סעיף 4 למעלה):
+מגדירים את משתני הסביבה (מפתח ה-Brevo API - ראו סעיף 4 למעלה):
 
 ```bash
-railway variables --set "SENDGRID_API_KEY=SG.your_api_key_here" --set "MAIL_FROM=SPORTLAND <resume.csport@gmail.com>"
+railway variables --set "BREVO_API_KEY=xkeysib-your_api_key_here" --set "MAIL_FROM=SPORTLAND <resume.csport@gmail.com>"
 ```
 
 מעלים ומריצים את השרת:

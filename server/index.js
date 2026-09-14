@@ -34,7 +34,7 @@ const upload = multer({
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
 
-const SENDGRID_API_URL = "https://api.sendgrid.com/v3/mail/send";
+const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 
 function parseFromHeader(value) {
   const match = String(value).match(/^\s*(.*?)\s*<(.+)>\s*$/);
@@ -45,26 +45,24 @@ function parseFromHeader(value) {
 }
 
 async function sendApplicationEmail({ from, to, replyTo, subject, text, html, attachment }) {
-  const response = await fetch(SENDGRID_API_URL, {
+  const response = await fetch(BREVO_API_URL, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${process.env.SENDGRID_API_KEY}`,
-      "Content-Type": "application/json"
+      "api-key": process.env.BREVO_API_KEY,
+      "Content-Type": "application/json",
+      Accept: "application/json"
     },
     body: JSON.stringify({
-      personalizations: [{ to: [{ email: to }] }],
-      from: parseFromHeader(from),
-      reply_to: { email: replyTo },
+      sender: parseFromHeader(from),
+      to: [{ email: to }],
+      replyTo: { email: replyTo },
       subject,
-      content: [
-        { type: "text/plain", value: text },
-        { type: "text/html", value: html }
-      ],
-      attachments: [
+      textContent: text,
+      htmlContent: html,
+      attachment: [
         {
-          filename: attachment.filename,
-          content: attachment.buffer.toString("base64"),
-          disposition: "attachment"
+          name: attachment.filename,
+          content: attachment.buffer.toString("base64")
         }
       ]
     })
@@ -74,7 +72,7 @@ async function sendApplicationEmail({ from, to, replyTo, subject, text, html, at
     const errorBody = await response.text().catch(function () {
       return "";
     });
-    throw new Error(`SendGrid API error (${response.status}): ${errorBody}`);
+    throw new Error(`Brevo API error (${response.status}): ${errorBody}`);
   }
 }
 
