@@ -11,7 +11,7 @@ window.SPORTLAND_CONFIG = {
       name: "ספורטלנד חדרה",
       positions: [
         { id: "trainer", name: "מדריכות ומדריכי כושר" },
-        { id: "reception", name: "נציגות ונציגי קבלה" }
+        { id: "reception", name: "נציגות שירות" }
       ]
     },
     {
@@ -19,7 +19,7 @@ window.SPORTLAND_CONFIG = {
       name: "ספורטלנד בית יצחק",
       positions: [
         { id: "trainer", name: "מדריכות ומדריכי כושר" },
-        { id: "reception", name: "נציגות ונציגי קבלה" }
+        { id: "reception", name: "נציגות שירות" }
       ]
     },
     {
@@ -27,7 +27,7 @@ window.SPORTLAND_CONFIG = {
       name: "ספורטלנד קריית טבעון",
       positions: [
         { id: "trainer", name: "מדריכות ומדריכי כושר" },
-        { id: "reception", name: "נציגות ונציגי קבלה" }
+        { id: "reception", name: "נציגות שירות" }
       ]
     }
   ],

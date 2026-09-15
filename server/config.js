@@ -26,7 +26,7 @@ const BRANCHES = {
 
 const POSITIONS = {
   trainer: "מדריכות ומדריכי כושר",
-  reception: "נציגות ונציגי קבלה"
+  reception: "נציגות שירות"
 };
 
 module.exports = { BRANCHES, POSITIONS };
