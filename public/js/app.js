@@ -247,6 +247,9 @@
         return response.json();
       })
       .then(function () {
+        if (typeof fbq === "function") {
+          fbq("track", "Lead");
+        }
         showScreen("success");
       })
       .catch(function (err) {
