@@ -1,0 +1,13 @@
+{
+  "name": "smartcount-landing",
+  "version": "1.0.0",
+  "description": "SmartCount landing page – static site served by a zero-dependency Node server (Railway-ready).",
+  "private": true,
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}
