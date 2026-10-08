@@ -162,12 +162,6 @@
       if (!/^0(5\d{8}|[2-46-9]\d{7}|7\d{8})$/.test(digits)) return "נא להזין מספר טלפון ישראלי תקין";
       return "";
     },
-    email: function (v) {
-      v = v.trim();
-      if (!v) return "נא למלא כתובת דוא״ל";
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return "נא להזין כתובת דוא״ל תקינה";
-      return "";
-    },
     businessType: function (v) { return v ? "" : "נא לבחור את סוג העסק"; },
     consent: function (_, el) { return el.checked ? "" : "יש לאשר את מדיניות הפרטיות כדי שנוכל לחזור אליכם"; }
   };
@@ -228,16 +222,24 @@
 
     return fetch(cfg.endpoint, {
       method: "POST",
-      headers: Object.assign({ "Content-Type": "application/json" }, cfg.headers || {}),
+      // text/plain נמנע מבקשת preflight – נדרש ל-Google Apps Script
+      headers: Object.assign({ "Content-Type": cfg.contentType || "application/json" }, cfg.headers || {}),
       body: JSON.stringify(payload),
       signal: controller ? controller.signal : undefined
     }).then(function (res) {
       if (timer) clearTimeout(timer);
       if (!res.ok) throw { code: "http_" + res.status };
-      return res;
+      return res.text();
     }, function (err) {
       if (timer) clearTimeout(timer);
       throw { code: err && err.name === "AbortError" ? "timeout" : "network" };
+    }).then(function (text) {
+      // אם השרת מחזיר JSON עם ok – הוא חייב להיות true (Apps Script מחזיר 200 גם בשגיאה)
+      var data = null;
+      try { data = JSON.parse(text); } catch (e) { /* תשובה שאינה JSON – מסתמכים על סטטוס 2xx */ }
+      if (data && data.ok === false) throw { code: "rejected_" + (data.error || "unknown") };
+      if (cfg.requireOk && !(data && data.ok === true)) throw { code: "unconfirmed" };
+      return data;
     });
   }
 
@@ -299,7 +301,6 @@
         brand: "SmartCount",
         fullName: form.elements.fullName.value.trim(),
         phone: normalizePhone(form.elements.phone.value),
-        email: form.elements.email.value.trim(),
         businessType: form.elements.businessType.value,
         businessTypeLabel: form.elements.businessType.selectedOptions[0].text,
         notes: form.elements.notes.value.trim(),

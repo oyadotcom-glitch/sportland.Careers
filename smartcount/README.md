@@ -14,6 +14,7 @@ assets/js/config.js     <- כל ההגדרות: מדידה, Webhook, המלצו�
 assets/js/tracking.js   <- טעינת GTM/GA4/Ads/Pixel, שמירת UTM/GCLID, אירוע Lead
 assets/js/app.js        <- קרוסלה, טופס, CTA צף, אנימציות
 assets/css/style.css    <- עיצוב (צבעי המותג מוגדרים כמשתנים בראש הקובץ)
+integrations/google-sheets/  <- סקריפט Apps Script לשמירת הלידים בגיליון + הוראות
 assets/img/             <- לוגו, פביקון, תמונת שיתוף (og-image.png)
 ```
 
@@ -21,9 +22,10 @@ assets/img/             <- לוגו, פביקון, תמונת שיתוף (og-ima
 
 ## לפני עלייה לאוויר – צ'קליסט
 
-1. **Webhook / CRM** – למלא `lead.endpoint` ב-`config.js`. הדף שולח POST עם JSON.
-   הודעת התודה ואירוע ה-Lead מופעלים **רק** אם השרת החזיר 2xx. בלי endpoint הטופס מציג הודעה שהוא לא מחובר.
-   הכתובת חייבת לאפשר CORS (Make / Zapier / n8n / HubSpot Forms API מאפשרים).
+1. **Google Sheets** – הלידים נשמרים בגיליון דרך Google Apps Script. הוראות התקנה ב-`integrations/google-sheets/README.md`,
+   ואז להדביק את כתובת ה-`/exec` ב-`lead.endpoint` ב-`config.js`.
+   הודעת התודה ואירוע ה-Lead מופעלים **רק** אחרי שהסקריפט החזיר `{ ok: true }`. בלי endpoint הטופס מציג הודעה שהוא לא מחובר.
+   מעבר בעתיד ל-CRM / Webhook אחר: להחליף endpoint, ולשנות `contentType` ו-`requireOk` לפי מה שהמערכת מחזירה.
 2. **מדידה** – למלא `tracking.gtmId` ולהגדיר את התגים ב-GTM (מומלץ), או לחלופין מזהים ישירים (GA4 / Ads / Pixel). לא את שניהם.
    ב-`index.html` יש בלוק `noscript` של GTM בהערה – להחליף מזהה ולהסיר את ההערה.
 3. **המלצות** – להחליף את ההמלצות ב-`config.js` בהמלצות אמיתיות ומאושרות, ולשנות `isDemo: false`.
@@ -44,13 +46,13 @@ assets/img/             <- לוגו, פביקון, תמונת שיתוף (og-ima
 ב-GTM: טריגר Custom Event בשם `generate_lead` → תגי GA4 `generate_lead`, Google Ads Conversion ו-Meta `Lead`.
 מומלץ להעביר את `lead_id` כ-`transaction_id` ב-Google Ads וכ-`eventID` ב-Meta (מאפשר דה-דופליקציה מול Conversions API).
 
-## מבנה הליד שנשלח ל-Webhook
+## מבנה הליד שנשלח (JSON)
 
 ```json
 {
   "leadId": "uuid",
   "brand": "SmartCount",
-  "fullName": "…", "phone": "05XXXXXXXX", "email": "…",
+  "fullName": "…", "phone": "05XXXXXXXX",
   "businessType": "osek-patur", "businessTypeLabel": "עוסק פטור",
   "notes": "…",
   "consent": true, "consentText": "…", "marketingConsent": false,
