@@ -26,12 +26,14 @@ window.SMARTCOUNT_CONFIG = {
   },
 
   /**
-   * קליטת לידים
-   * endpoint – כתובת Webhook / CRM שמקבלת POST עם JSON.
-   * הודעת התודה מוצגת רק אם השרת החזיר תשובה תקינה (2xx).
+   * קליטת לידים – Google Sheets דרך Google Apps Script
+   * endpoint – כתובת ה-Web App (מסתיימת ב-/exec). הוראות: integrations/google-sheets/README.md
+   * הודעת התודה מוצגת רק אחרי שהסקריפט אישר שהשורה נשמרה בגיליון ({ ok: true }).
    */
   lead: {
-    endpoint: "",           // לדוגמה: "https://hook.eu2.make.com/xxxxxxxx"
+    endpoint: "",           // לדוגמה: "https://script.google.com/macros/s/XXXXXXXX/exec"
+    contentType: "text/plain;charset=utf-8", // חובה ל-Apps Script (בלי preflight). ל-Webhook אחר אפשר "application/json"
+    requireOk: true,        // הצלחה רק אם השרת החזיר { ok: true }
     headers: {},            // כותרות נוספות אם ה-CRM דורש (לא לשים כאן מפתחות סודיים!)
     timeoutMs: 15000,
     // אחרי הצלחה: "inline" – הודעת תודה בתוך הדף, או נתיב לעמוד תודה, למשל "thank-you.html"

@@ -381,21 +381,16 @@
 
         <div class="lead-card reveal">
           <form id="lead-form" class="lead-form" novalidate>
-            <div class="field">
-              <label for="f-name">שם מלא <span class="req" aria-hidden="true">*</span></label>
-              <input id="f-name" name="fullName" type="text" autocomplete="name" required maxlength="80" aria-describedby="e-name">
-              <p class="field-error" id="e-name" role="alert"></p>
-            </div>
             <div class="field-row">
+              <div class="field">
+                <label for="f-name">שם מלא <span class="req" aria-hidden="true">*</span></label>
+                <input id="f-name" name="fullName" type="text" autocomplete="name" required maxlength="80" aria-describedby="e-name">
+                <p class="field-error" id="e-name" role="alert"></p>
+              </div>
               <div class="field">
                 <label for="f-phone">טלפון <span class="req" aria-hidden="true">*</span></label>
                 <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="20" dir="ltr" aria-describedby="e-phone">
                 <p class="field-error" id="e-phone" role="alert"></p>
-              </div>
-              <div class="field">
-                <label for="f-email">דוא״ל <span class="req" aria-hidden="true">*</span></label>
-                <input id="f-email" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="120" dir="ltr" aria-describedby="e-email">
-                <p class="field-error" id="e-email" role="alert"></p>
               </div>
             </div>
             <div class="field">
@@ -429,7 +424,7 @@
             </div>
             <div class="field field-check">
               <input id="f-marketing" name="marketingConsent" type="checkbox">
-              <label for="f-marketing">אשמח לקבל מ-SmartCount עדכונים ותוכן מקצועי בדוא״ל וב-SMS <span class="optional">(לא חובה)</span></label>
+              <label for="f-marketing">אשמח לקבל מ-SmartCount עדכונים ותוכן מקצועי בהודעות SMS <span class="optional">(לא חובה)</span></label>
             </div>
 
             <button class="btn btn-primary btn-lg btn-block" type="submit" data-submit>
