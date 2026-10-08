@@ -452,6 +452,10 @@ p { margin: 0; }
 .field-check .field-error { grid-column: 2; }
 .field-check.has-error label { color: var(--danger); }
 
+.consent-note { font-size: 13.5px; line-height: 1.6; color: var(--muted); }
+.consent-note a { color: var(--blue-600); }
+.footer-operator { margin-top: 10px; font-size: 13.5px; color: rgba(255, 255, 255, .6); }
+
 .hp { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 .btn .spinner { display: none; width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid rgba(255, 255, 255, .45); border-top-color: #fff; animation: spin .8s linear infinite; }

@@ -55,7 +55,7 @@ assets/img/             <- לוגו, פביקון, תמונת שיתוף (og-ima
   "fullName": "…", "phone": "05XXXXXXXX",
   "businessType": "osek-patur", "businessTypeLabel": "עוסק פטור",
   "notes": "…",
-  "consent": true, "consentText": "…", "marketingConsent": false,
+  "consent": true, "consentText": "…",
   "submittedAt": "ISO", "pageUrl": "…", "referrer": "…", "userAgent": "…",
   "attribution": {
     "utm_source": "", "utm_medium": "", "utm_campaign": "", "utm_term": "", "utm_content": "", "utm_id": "",

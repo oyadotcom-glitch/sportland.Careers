@@ -417,17 +417,9 @@
               <input id="f-company" name="company" type="text" tabindex="-1" autocomplete="off">
             </div>
 
-            <div class="field field-check">
-              <input id="f-consent" name="consent" type="checkbox" required aria-describedby="e-consent">
-              <label for="f-consent">קראתי ואני מסכים/ה ל<a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a> ול<a href="terms.html" target="_blank" rel="noopener">תנאי השימוש</a>, ומאשר/ת ש-SmartCount תיצור איתי קשר בנוגע לפנייה. ידוע לי שהפרטים עשויים לעבור למשרד רואי חשבון שותף לצורך טיפול בפנייתי.</label>
-              <p class="field-error" id="e-consent" role="alert"></p>
-            </div>
-            <div class="field field-check">
-              <input id="f-marketing" name="marketingConsent" type="checkbox">
-              <label for="f-marketing">אשמח לקבל מ-SmartCount עדכונים ותוכן מקצועי בהודעות SMS <span class="optional">(לא חובה)</span></label>
-            </div>
+            <p class="consent-note" id="consent-note">בלחיצה על ״אני רוצה לשמוע פרטים״ אני מאשר/ת שקראתי את <a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a>. ידוע לי כי פרטיי ישמשו ליצירת קשר בנוגע לפנייתי ועשויים להיות מועברים למשרד רואי חשבון המשתף פעולה עם SmartCount לצורך מתן השירות המבוקש.</p>
 
-            <button class="btn btn-primary btn-lg btn-block" type="submit" data-submit>
+            <button class="btn btn-primary btn-lg btn-block" type="submit" data-submit aria-describedby="consent-note">
               <span class="btn-label">אני רוצה לשמוע פרטים</span>
               <span class="spinner" aria-hidden="true"></span>
             </button>
@@ -455,7 +447,7 @@
       <div class="footer-about">
         <h2 class="footer-title">על SmartCount</h2>
         <p>SmartCount מציעה שירותי ראיית חשבון והנהלת חשבונות דיגיטלית לעצמאים ולעסקים בישראל. השירותים המקצועיים ניתנים על ידי משרד רואי חשבון שותף.</p>
-        <!-- TODO: שם המשרד השותף / שם החברה המפעילה ומספר ח.פ. -->
+        <p class="footer-operator">האתר מופעל על ידי אוטודוקס 2000 בע״מ, ח.פ. 513059329 · קרליבך 10, תל אביב · טלפון: <a href="tel:+972722151312" dir="ltr">072-2151312</a></p>
       </div>
       <nav class="footer-links" aria-label="קישורים משפטיים">
         <h2 class="footer-title">מידע</h2>
