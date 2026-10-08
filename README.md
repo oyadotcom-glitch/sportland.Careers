@@ -6,6 +6,7 @@
 ## מבנה
 
 ```
+server.js / railway.json <- שרת ופריסה ל-Railway
 index.html              <- כל הקופי של הדף (טקסטים, כותרות, FAQ, SEO)
 privacy.html            <- מדיניות פרטיות (טיוטה – להשלמה ע"י עו"ד)
 terms.html              <- תנאי שימוש (טיוטה)
@@ -18,7 +19,21 @@ integrations/google-sheets/  <- סקריפט Apps Script לשמירת הלידי
 assets/img/             <- לוגו, פביקון, תמונת שיתוף (og-image.png)
 ```
 
-הרצה מקומית: `npx http-server smartcount -p 8080` ולפתוח `http://localhost:8080`.
+הרצה מקומית: `cd smartcount && npm start` ולפתוח `http://localhost:8080`.
+
+## פריסה ב-Railway
+
+התיקייה כוללת שרת Node קטן בלי תלויות (`server.js`) והגדרות Railway (`railway.json`).
+השרת מגיש רק את קבצי האתר: README, קוד השרת והסקריפטים לא נגישים מבחוץ.
+
+1. ב-Railway: **New Project** (או פרויקט קיים) → **Deploy from GitHub repo** → `sportland.careers`.
+2. בהגדרות השירות (**Settings**):
+   - **Source → Branch**: `smartcount-landing` (או `main` אחרי מיזוג).
+   - **Source → Root Directory**: `/smartcount` ← חשוב, אחרת Railway יפרוס את אתר הגיוס של Sportland.
+3. **Networking → Generate Domain** לקבלת כתובת זמנית, או **Custom Domain** לדומיין משלכם.
+4. אחרי שיש דומיין סופי: לעדכן `canonical` ו-`og:image` ב-`index.html` לכתובת המלאה.
+
+בדיקת תקינות: `https://<הדומיין>/healthz` מחזיר `ok`.
 
 ## לפני עלייה לאוויר – צ'קליסט
 
