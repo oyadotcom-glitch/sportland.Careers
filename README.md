@@ -19,19 +19,17 @@ integrations/google-sheets/  <- סקריפט Apps Script לשמירת הלידי
 assets/img/             <- לוגו, פביקון, תמונת שיתוף (og-image.png)
 ```
 
-הרצה מקומית: `cd smartcount && npm start` ולפתוח `http://localhost:8080`.
+הרצה מקומית: `npm start` ולפתוח `http://localhost:8080`.
 
 ## פריסה ב-Railway
 
 התיקייה כוללת שרת Node קטן בלי תלויות (`server.js`) והגדרות Railway (`railway.json`).
 השרת מגיש רק את קבצי האתר: README, קוד השרת והסקריפטים לא נגישים מבחוץ.
 
-1. ב-Railway: **New Project** (או פרויקט קיים) → **Deploy from GitHub repo** → `sportland.careers`.
-2. בהגדרות השירות (**Settings**):
-   - **Source → Branch**: `smartcount-landing` (או `main` אחרי מיזוג).
-   - **Source → Root Directory**: `/smartcount` ← חשוב, אחרת Railway יפרוס את אתר הגיוס של Sportland.
-3. **Networking → Generate Domain** לקבלת כתובת זמנית, או **Custom Domain** לדומיין משלכם.
-4. אחרי שיש דומיין סופי: לעדכן `canonical` ו-`og:image` ב-`index.html` לכתובת המלאה.
+1. ב-Railway: **New Project** → **Deploy from GitHub repo** → `smartcount` (ענף `main`).
+   אין צורך להגדיר Root Directory: Railway מזהה את `package.json` ומריץ `npm start`.
+2. **Networking → Generate Domain** לקבלת כתובת זמנית, או **Custom Domain** לדומיין משלכם.
+3. אחרי שיש דומיין סופי: לעדכן `canonical` ו-`og:image` ב-`index.html` לכתובת המלאה.
 
 בדיקת תקינות: `https://<הדומיין>/healthz` מחזיר `ok`.
 
