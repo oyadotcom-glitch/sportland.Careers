@@ -162,8 +162,7 @@
       if (!/^0(5\d{8}|[2-46-9]\d{7}|7\d{8})$/.test(digits)) return "נא להזין מספר טלפון ישראלי תקין";
       return "";
     },
-    businessType: function (v) { return v ? "" : "נא לבחור את סוג העסק"; },
-    consent: function (_, el) { return el.checked ? "" : "יש לאשר את מדיניות הפרטיות כדי שנוכל לחזור אליכם"; }
+    businessType: function (v) { return v ? "" : "נא לבחור את סוג העסק"; }
   };
 
   function errorEl(input) { return document.getElementById(input.getAttribute("aria-describedby")); }
@@ -304,9 +303,9 @@
         businessType: form.elements.businessType.value,
         businessTypeLabel: form.elements.businessType.selectedOptions[0].text,
         notes: form.elements.notes.value.trim(),
+        // ההסכמה ניתנת בלחיצה על כפתור השליחה – נשמר הנוסח שהוצג לפונה
         consent: true,
-        consentText: form.querySelector('label[for="f-consent"]').textContent.replace(/\s+/g, " ").trim(),
-        marketingConsent: form.elements.marketingConsent.checked,
+        consentText: document.getElementById("consent-note").textContent.replace(/\s+/g, " ").trim(),
         submittedAt: new Date().toISOString(),
         pageUrl: window.location.href.split("#")[0],
         referrer: document.referrer || "",
